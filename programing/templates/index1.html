@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>US Presidential Election Results</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group select, .form-group button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #map, #plot {
+            margin-top: 20px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e9e9e9;
+            border-radius: 5px;
+        }
+        .result p {
+            margin: 0;
+            font-weight: bold;
+        }
+        .result .winner {
+            font-size: 20px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>US Presidential Election Results</h1>
+        <form method="post">
+            <div class="form-group">
+                <label for="year">Select Year:</label>
+                <select name="year" id="year" required>
+                    {% for yr in years %}
+                        <option value="{{ yr }}" {% if year == yr %}selected{% endif %}>{{ yr }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="chart_type">Select Chart Type:</label>
+                <select name="chart_type" id="chart_type" required>
+                    <option value="map" {% if chart_type == 'map' %}selected{% endif %}>Map</option>
+                    <option value="plot" {% if chart_type == 'plot' %}selected{% endif %}>Pie Chart</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit">Show Results</button>
+            </div>
+        </form>
+
+        <div id="map">
+            {% if plot_div %}
+                {{ plot_div | safe }}
+            {% endif %}
+        </div>
+
+        <div class="result">
+            {% if winner %}
+                <p>Overall Winner: <span class="winner">{{ winner }}</span></p>
+                <p>Party: {{ winner_party }}</p>
+                <p>Number of States Won: {{ states_won }}</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
